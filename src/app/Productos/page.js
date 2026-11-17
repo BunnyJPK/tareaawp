@@ -3,8 +3,7 @@ import { createClient } from "../database/sv";
 
 
 
-async function getProductos() {
-    const bd = await createClient();
+async function getProductos(bd) {
     const { data: productos, error } = await bd.from("producto").select("id, nombre, precio, descripcion, imagen");
     if (error) {
         console.error("Error al obtener los productos:", error);
@@ -16,11 +15,15 @@ async function getProductos() {
 
 export default async function ProductosPage(){
 
-    const pr = await getProductos();
+    const bd = await createClient();
+    const [{ data: { user } }, pr] = await Promise.all([
+        bd.auth.getUser(),
+        getProductos(bd),
+    ]);
 
     return(
         <section>
-            <InterfaceProducto productos={pr} />
+            <InterfaceProducto productos={pr} puedeEliminar={Boolean(user)} />
         </section>
     )
 }    

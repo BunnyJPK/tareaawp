@@ -26,6 +26,10 @@ export async function agregarProducto(nombre, precio, imagen, descripcion) {
 
 export async function eliminarProducto(id) {
     const bd = await createClient();
+    const { data: { user }, error: errorSesion } = await bd.auth.getUser();
+    if (errorSesion || !user) {
+        throw new Error("Debes iniciar sesión para eliminar productos.");
+    }
     const { data, error } = await bd
         .from("producto")
         .delete()

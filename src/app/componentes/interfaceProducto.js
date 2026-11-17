@@ -7,7 +7,7 @@ import { createClient } from "../database/bd";
 
 
 export default function 
-InterfaceProducto({ productos }) {
+InterfaceProducto({ productos, puedeEliminar }) {
     const [agregado, setAgregado] = useState(false);
     const [error, setError] = useState("");
     const [guardando, setGuardando] = useState(false);
@@ -135,14 +135,14 @@ InterfaceProducto({ productos }) {
                             </summary>
                             <p className="mt-3 whitespace-pre-wrap text-sm text-gray-700">{item.descripcion || "Este producto no tiene descripción."}</p>
                             </details>
-                            <button
+                            {puedeEliminar && <button
                                 type="button"
                                 onClick={() => handleEliminar(item.id)}
                                 disabled={eliminandoId === item.id}
                                 className="mt-4 inline-flex items-center justify-center rounded-lg border border-red-500 bg-red-500 px-4 py-2 text-sm font-medium text-white hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
                             >
                                 {eliminandoId === item.id ? "Eliminando..." : "Eliminar"}
-                            </button>
+                            </button>}
                         </div>
                     ))}
                 </div>
